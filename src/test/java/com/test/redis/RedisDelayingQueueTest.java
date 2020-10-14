@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 public class RedisDelayingQueueTest {
 
@@ -31,6 +32,8 @@ public class RedisDelayingQueueTest {
 
         try {
             producer.join();
+            Pipeline pipeline = jedis.pipelined();
+            pipeline.sync();
             Thread.sleep(6000);
             consumer.interrupt();
             consumer.join();
